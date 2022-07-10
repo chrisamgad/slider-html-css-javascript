@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slider</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <style>
+        .slider-container{
+            
+            width:50%;
+            border: 2px solid red;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .slider{
+            
+            width: 100%; 
+            height: 30%;
+            display: flex;
+            
+            
+        }
+        .slider img{
+            max-width: 100%;
+            max-height: 100%;
+            
+        }
+    </style>
+</head>
+    <body>
+
+        <div class="slider-container">
+            <div class="slider">
+                <img src="./images/five.jpg" class="sliderImage" id="lastImageCloned">
+                <img src="./images/one.jpg" class="sliderImage">
+                <img src="./images/two.jpg" class="sliderImage">
+                <img src="./images/three.jpg" class="sliderImage">
+                <img src="./images/four.jpg" class="sliderImage" >
+                <img src="./images/five.jpg" class="sliderImage">
+                <img src="./images/one.jpg" class="sliderImage" id="firstImageCloned">
+            </div>
+        </div>
+        <button id="next"> Next</button>
+        <button id="prev"> Previous</button>
+    </body>
+
+    <script>
+        $(document).ready(function(){
+            imagesInSlider = $(".sliderImage");
+
+            let counter = 1;
+            let size = $(".slider-container").width()
+            
+            $(".slider").css({"transform": `translate(${ -size * counter }px, 0)`})
+
+            $("#next").click(function(){
+                if(counter==imagesInSlider.length-1)
+                {
+                    return false
+                }
+                counter++;
+                // if(counter == imagesInSlider.length){
+                //     counter = 0;
+                // }
+                
+                //size = $(imagesInSlider[counter]).width()
+                console.log(counter * size);
+                $(".slider").css({"transform": `translate(${ -size * counter }px, 0)`, "transition" : "1s"})
+                // $.each(imagesInSlider, function(index, imageTag){
+                //     console.log(imageTag)
+                //     $(imageTag).css({"transform": `translate(-${size*counter }px, 0)`}); 
+                // })
+                console.log(counter)
+
+                
+            });
+
+            $("#prev").click(function(){
+                if(counter== 0) //wait for transitionend, so get out of click event to avoid error on next code
+                {
+                    return false
+                }
+                counter--;
+
+                // if(counter < 0){
+                //     counter = imagesInSlider.length-1;
+                // }
+
+               // size = $(imagesInSlider[counter]).width()
+                console.log(counter * size);
+                $(".slider").css({"transform": `translate(${ -size * counter }px, 0)`, "transition" : "1s"})
+                // $.each(imagesInSlider, function(index, imageTag){
+                //     if(counter < 0){
+                //         $(imageTag).css({"translation" : "none"})
+                //     }
+                //     console.log(imageTag)
+                //     $(imageTag).css({"transform": `translate(-${size*counter }px, 0)`}); 
+                // })
+                console.log(counter)
+
+            });
+
+            $(window).on('resize', function(){
+                size = $(".slider-container").width()
+                $(".slider").css({"transition" :"none"});
+                $(".slider").css({"transform": `translate(${ -size * counter }px, 0)`}) 
+                // console.log('test')
+            });
+
+            $(".slider").on('transitionend webkitTransitionEnd oTransitionEnd', function () {
+                console.log("Fired")
+                console.log(imagesInSlider[counter].id == "lastImageCloned")
+                console.log(imagesInSlider[counter].id == "firstImageCloned")
+                if(imagesInSlider[counter].id == "lastImageCloned"){
+                    $(".slider").css({"transition" :"none"});
+                    counter = imagesInSlider.length - 2
+                    $(".slider").css({"transform": `translate(${ -size * counter }px, 0)`})
+                }else if(imagesInSlider[counter].id == "firstImageCloned"){
+                    $(".slider").css({"transition" :"none"});
+                    counter = 1
+                    $(".slider").css({"transform": `translate(${ -size * counter }px, 0)`})
+                }
+            });
+
+        });
+
+
+
+    </script>
+</html>
