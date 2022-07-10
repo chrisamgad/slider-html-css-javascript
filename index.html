@@ -4,14 +4,44 @@
     <title>Slider</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
         .slider-container{
             
             width:50%;
-            border: 2px solid red;
+            /* border: 2px solid red; */
             margin: 0 auto;
             overflow: hidden;
+            border-radius: 15px;
+
+            position:relative;
         }
+
+        .slider-container > i:first-child {
+            position: absolute;
+            color: #efefef;
+            top: 50%;
+            left: 5%;
+            font-size: 47px;
+            z-index: 9999;
+            cursor: pointer;
+        }
+
+        .slider-container > i:nth-child(2) {
+            position: absolute;
+            color: #efefef;
+            top: 50%;
+            right: 5%;
+            font-size: 47px;
+            z-index: 9999;
+            cursor: pointer;
+        }
+        .slider-container > i:hover {
+          
+            color: #c4bdbd;
+        }
+
         .slider{
             
             width: 100%; 
@@ -20,6 +50,7 @@
             
             
         }
+
         .slider img{
             max-width: 100%;
             max-height: 100%;
@@ -30,6 +61,8 @@
     <body>
 
         <div class="slider-container">
+            <i class="fa-solid fa-arrow-left" id="prev" ></i>
+            <i class="fa-solid fa-arrow-right" id="next"></i>
             <div class="slider">
                 <img src="./images/five.jpg" class="sliderImage" id="lastImageCloned">
                 <img src="./images/one.jpg" class="sliderImage">
@@ -40,8 +73,10 @@
                 <img src="./images/one.jpg" class="sliderImage" id="firstImageCloned">
             </div>
         </div>
-        <button id="next"> Next</button>
-        <button id="prev"> Previous</button>
+
+        <!-- <button id="next"> Next</button>
+        <button id="prev"> Previous</button> -->
+
     </body>
 
     <script>
@@ -56,7 +91,7 @@
             $("#next").click(function(){
                 if(counter==imagesInSlider.length-1)
                 {
-                    return false
+                    return ;
                 }
                 counter++;
                 // if(counter == imagesInSlider.length){
@@ -78,7 +113,7 @@
             $("#prev").click(function(){
                 if(counter== 0) //wait for transitionend, so get out of click event to avoid error on next code
                 {
-                    return false
+                    return ;
                 }
                 counter--;
 
@@ -89,22 +124,16 @@
                // size = $(imagesInSlider[counter]).width()
                 console.log(counter * size);
                 $(".slider").css({"transform": `translate(${ -size * counter }px, 0)`, "transition" : "1s"})
-                // $.each(imagesInSlider, function(index, imageTag){
-                //     if(counter < 0){
-                //         $(imageTag).css({"translation" : "none"})
-                //     }
-                //     console.log(imageTag)
-                //     $(imageTag).css({"transform": `translate(-${size*counter }px, 0)`}); 
-                // })
+
                 console.log(counter)
 
             });
 
+            //On window resizing, recalculate the size of image as it now has changed --> For responsiveness
             $(window).on('resize', function(){
                 size = $(".slider-container").width()
                 $(".slider").css({"transition" :"none"});
                 $(".slider").css({"transform": `translate(${ -size * counter }px, 0)`}) 
-                // console.log('test')
             });
 
             $(".slider").on('transitionend webkitTransitionEnd oTransitionEnd', function () {
